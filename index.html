@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Validador de CPF e RG</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 50px;
+        }
+        input {
+            padding: 10px;
+            margin: 10px;
+            width: 250px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .resultado {
+            margin-top: 15px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>Validador de CPF e RG</h2>
+
+    <div>
+        <input type="text" id="cpfInput" placeholder="Digite o CPF">
+        <button onclick="validarCPF()">Validar CPF</button>
+        <p id="resultadoCPF" class="resultado"></p>
+    </div>
+
+    <div>
+        <input type="text" id="rgInput" placeholder="Digite o RG">
+        <button onclick="validarRG()">Validar RG</button>
+        <p id="resultadoRG" class="resultado"></p>
+    </div>
+
+    <script>
+        async function validarCPF() {
+            const cpf = document.getElementById("cpfInput").value;
+            const resultado = document.getElementById("resultadoCPF");
+
+            const response = await fetch("http://localhost:8080/api/cpf/validar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(cpf)
+            });
+
+            const isValid = await response.json();
+            resultado.textContent = isValid ? "✅ CPF Válido!" : "❌ CPF Inválido!";
+            resultado.style.color = isValid ? "green" : "red";
+        }
+
+        async function validarRG() {
+            const rg = document.getElementById("rgInput").value;
+            const resultado = document.getElementById("resultadoRG");
+
+            const response = await fetch("http://localhost:8080/api/rg/validar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(rg)
+            });
+
+            const isValid = await response.json();
+            resultado.textContent = isValid ? "✅ RG Válido!" : "❌ RG Inválido!";
+            resultado.style.color = isValid ? "green" : "red";
+        }
+    </script>
+
+</body>
+</html>
